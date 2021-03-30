@@ -167,20 +167,20 @@ based on the supplied `title`.
 Use the following construct:
 
 ```go
-testData := map[string]struct{
-	inputTile string
-	expectedPeople []string
-}{
-	// Use your own data here ;-)
-	{
-		inputTitle: "Developer",
-		expectedPeople: []string{"Dahlia", "Rob"},
-	},
-	{
-		inputTitle: "Product Owner",
-		expectedPeople: []string{"Bianca"},
+	tests := map[string]struct{
+		inputTitle string
+		expectedPeople []string
+	}{
+		// Use your own data here ;-)
+		"developer": {
+			inputTitle: "Developer",
+			expectedPeople: []string{"Lindsay", "Chris"},
+		},
+		"product owner": {
+			inputTitle: "Product Owner",
+			expectedPeople: []string{"Bob"},
+		},
 	}
-}
 ```
 
 We'd also like you to update the GetPeopleRoute so that it
@@ -190,7 +190,11 @@ we get to the next part of the workshop to make it easier.
 ### C: Test to see if it works
 
 Open your browser and see if everything works as expected.
-Hopefully everything's working nicely :-)
+You should be able to filter properties and get a list of the people that have the given title.
+
+If no filter is given, the API will return null.
+If you like, you can add a condition that only filters the people if the input filter is given.
+This change is not part of the workshop.
 
 ## Exercise 4: Creating people
 

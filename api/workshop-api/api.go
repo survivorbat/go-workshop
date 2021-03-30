@@ -1,19 +1,49 @@
 package workshop_api
 
 import (
-	"errors"
 	"github.com/gin-gonic/gin"
 )
 
+/**
+Exercise 1
+*/
+
+type Person struct {
+	Name string `json:"name,omitempty"`
+	Title string `json:"title,omitempty"`
+}
+
+var People = []Person{
+	{Name: "Lindsay", Title: "Developer"},
+	{Name: "Bob", Title: "Product Owner"},
+	{Name: "Chris", Title: "Developer"},
+	{Name: "Dahlia", Title: "Operations"},
+}
+
 // Return a list of people
-func getPeople() ([]string, error) {
-	return nil, errors.New("not implemented")
+func getPeople(title string) ([]Person, error) {
+	var result []Person
+
+	for _, person := range People {
+		if person.Title == title {
+			result = append(result, person)
+		}
+	}
+
+	return result, nil
 }
 
 // This route returns a list of people from the 'basics' file
 func GetPeopleRoute(c *gin.Context) {
+	titleFilter := c.Query("title")
+
 	// Ignore the error
-	result, _ := getPeople()
+	result, err := getPeople(titleFilter)
+
+	if err != nil {
+		c.JSON(500, "an error occurred!")
+		return
+	}
 
 	// Return json
 	c.JSON(200, result)
