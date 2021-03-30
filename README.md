@@ -1,7 +1,9 @@
 # Go Workshop
 
-This repository contains the Go code workshop to help engineers
+This repository contains the Go code workshop to help colleagues
 get started with writing Go code.
+In the workshop we touch upon a few basic Go constructs and the Gin framework
+that allows us to easily build an API with only a few lines of code.
 
 - [Go Workshop](#go-workshop)
   - [Prerequisites](#prerequisites)
