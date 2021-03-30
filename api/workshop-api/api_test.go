@@ -1,6 +1,9 @@
 package workshop_api
 
 import (
+	"errors"
+	"github.com/gin-gonic/gin"
+	"net/http/httptest"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -49,6 +52,27 @@ Exercise 2
 Exercise 3
 */
 
+type MockPeopleService struct {
+	GetPeopleReturns []Person
+	GetPeopleError error
+	GetPeopleCalledWith string
+
+	AddPersonError error
+	AddPersonCalledWith Person
+}
+
+func (p *MockPeopleService) getPeople(filterTitle string) ([]Person, error) {
+	p.GetPeopleCalledWith = filterTitle
+
+	return p.GetPeopleReturns, p.GetPeopleError
+}
+
+func (p *MockPeopleService) addPerson(person Person) error {
+	p.AddPersonCalledWith = person
+	return p.AddPersonError
+}
+
+
 func TestGetPeople_ReturnsExpectedData(t *testing.T) {
 	tests := map[string]struct{
 		inputTitle string
@@ -67,8 +91,11 @@ func TestGetPeople_ReturnsExpectedData(t *testing.T) {
 
 	for name, testData := range tests {
 		t.Run(name, func(t *testing.T) {
+			// Arrange
+			service := PeopleService{}
+
 			// Act
-			result, err := getPeople(testData.inputTitle)
+			result, err := service.getPeople(testData.inputTitle)
 
 			// Assert
 			assert.Nil(t, err)
@@ -79,6 +106,40 @@ func TestGetPeople_ReturnsExpectedData(t *testing.T) {
 			for _, person := range result {
 				assert.Contains(t, testData.expectedPeople, person.Name)
 			}
+		})
+	}
+}
+
+func TestGetPeopleRoute_Returns500OnError(t *testing.T) {
+	tests := map[string]struct{
+		errorMessage string
+	} {
+		"test": {errorMessage: "test"},
+		"error occurred": {errorMessage: "error occurred"},
+	}
+
+	for name, testData := range tests {
+		t.Run(name, func (t *testing.T) {
+			// Arrange
+
+			// Make sure this returns an error
+			mockService := MockPeopleService{}
+			mockService.GetPeopleError = errors.New(testData.errorMessage)
+
+			// Get the controller
+			controller := PeopleController{PeopleService: &mockService}
+
+			// Response will be written to this writer
+			writer := httptest.NewRecorder()
+
+			// Test context for Gin
+			c, _ := gin.CreateTestContext(writer)
+
+			// Act
+			controller.GetPeopleRoute(c)
+
+			// Assert
+			assert.Equal(t, 500, writer.Code)
 		})
 	}
 }

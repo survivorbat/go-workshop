@@ -18,8 +18,14 @@ func main() {
 
 	// Add routes
 	apiRunner.GET("/basics/:input", basics.Basics)
-	apiRunner.GET("/api/people", workshop_api.GetPeopleRoute)
-	apiRunner.POST("/api/people", workshop_api.PostPeopleRoute)
+
+	peopleController := workshop_api.PeopleController{
+		// Instantiate a people service
+		PeopleService: &workshop_api.PeopleService{},
+	}
+
+	apiRunner.GET("/api/people", peopleController.GetPeopleRoute)
+	apiRunner.POST("/api/people", peopleController.PostPeopleRoute)
 
 	// Run the application on port 8080
 	err := apiRunner.Run(serveAddress)

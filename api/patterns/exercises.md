@@ -17,6 +17,7 @@ Then you can visit these pages:
     - [D: Almost there](#d-almost-there)
     - [Intermission](#intermission)
     - [E: Writing a test](#e-writing-a-test)
+    - [F: The POST route](#f-the-post-route)
 
 ## Exercise 1, Mocking Routes
 
@@ -81,7 +82,7 @@ If you like, you can put the People variable in the struct, but you don't have t
 Now, create the following interface:
 
 ```go
-type PeopleServiceInterface {
+type PeopleServiceInterface interface {
     getPeople(titleFilter string) ([]Person, error)
     addPerson(person Person) error
 }
@@ -108,13 +109,13 @@ you'll be using the following construct:
 ```go
 func (p *PeopleController) GetPeopleRoute(c *gin.Context) {
     // [...]
-    result, err := p.PeopleService.getPeople()
+    result, err := p.PeopleService.getPeople(titleFilter)
     // [...]
 }
 
 func (p *PeopleController) PostPeopleRoute(c *gin.Context) {
     // [...]
-    result, err := p.PeopleService.addPerson(person)
+    err := p.PeopleService.addPerson(postedPerson)
     // [...]
 }
 ```
@@ -126,7 +127,7 @@ The last step is to go to the `main.go` and change the following code.
 ```go
 peopleController := workshop_api.PeopleController{
     // Instantiate a people service
-    PeopleService: PeopleService{}
+    PeopleService: &workshop_api.PeopleService{}
 }
 
 apiRunner.GET("/api/people", peopleController.GetPeopleRoute)
@@ -160,16 +161,20 @@ type MockPeopleService struct {
     GetPeopleError error
     GetPeopleCalledWith string
 
-    // ... addPeople
+	AddPersonError error
+	AddPersonCalledWith Person
 }
 
-func (p *MockPeopleService) getPeople(filterTitle string) {
-    p.getPeopleCalledWith = filterTitle
+func (p *MockPeopleService) getPeople(filterTitle string) ([]Person, error) {
+	p.GetPeopleCalledWith = filterTitle
 
-    return getPeopleReturns, getPeopleError
+	return p.GetPeopleReturns, p.GetPeopleError
 }
 
-// ... addPeople
+func (p *MockPeopleService) addPerson(person Person) error {
+	p.AddPersonCalledWith = person
+	return p.AddPersonError
+}
 ```
 
 This service will allow us to properly test whether
@@ -180,35 +185,41 @@ For example:
 ```go
 func TestGetPeopleRoute_Returns500OnError(t *testing.T) {
 	tests := map[string]struct{
-        errorMessage string		
-    } {
-	    "test": {errorMessage: "test"},
-	    "error occurred": {errorMessage: "error occurred"}
-    }
-	
-    for name, testData := range tests {
-    	t.Run(name, func (t *testing.T)) {
-          // Arrange
-    		
-    	  // Make sure this returns an error
-          mockService := MockPeopleService{}
-          mockService.GetPeopleError = errors.New(testData.errorMessage)
-          
-          // Get the controller
-          controller := PeopleController{PeopleService: mockService}
+		errorMessage string
+	} {
+		"test": {errorMessage: "test"},
+		"error occurred": {errorMessage: "error occurred"},
+	}
 
-          // Response will be written to this writer
-          writer := httptest.NewRecorder()
-          
-          // Test context for Gin
-          c, _ := gin.CreateTestContext(writer)
-          
-          // Act
-          controller.GetPeopleRoute(c)
-          
-          // Assert 
-          assert.Equal(t, 500, writer.Code)
-      }
-    }
+	for name, testData := range tests {
+		t.Run(name, func (t *testing.T) {
+			// Arrange
+
+			// Make sure this returns an error
+			mockService := MockPeopleService{}
+			mockService.GetPeopleError = errors.New(testData.errorMessage)
+
+			// Get the controller
+			controller := PeopleController{PeopleService: &mockService}
+
+			// Response will be written to this writer
+			writer := httptest.NewRecorder()
+
+			// Test context for Gin
+			c, _ := gin.CreateTestContext(writer)
+
+			// Act
+			controller.GetPeopleRoute(c)
+
+			// Assert
+			assert.Equal(t, 500, writer.Code)
+		})
+	}
 }
 ```
+
+Now, create a test like this for the GetPeopleCalledWith property,
+check if the function is called with the expected parameter (title).
+
+### F: The POST route
+
