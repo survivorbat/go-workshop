@@ -192,13 +192,16 @@ we get to the next part of the workshop to make it easier.
 Open your browser and see if everything works as expected.
 You should be able to filter properties and get a list of the people that have the given title.
 
+### D: Optional
+
 If no filter is given, the API will return null.
-If you like, you can add a condition that only filters the people if the input filter is given.
-This change is not part of the workshop.
+If you like, you can add a condition that only filters the people if the input filter is given,
+you could also improve the error in the route.
+These changes are not part of the workshop.
 
 ## Exercise 4: Creating people
 
-OK so we're done with the GET route for now, let's start POST-ing.
+OK, so we're done with the GET route for now, let's start POST-ing.
 
 You can use any tool you like to send a POST request to `/api/people`,
 but in this workshop we're going to stick to simply using CURL.
