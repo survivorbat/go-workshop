@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Go Workshop</title>
+
+    <meta http-equiv="refresh" content="5" >
+    
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container h-100 py-1">
+        <header class="row align-items-center">
+            <div class="col-12 p-5 mb-4 bg-light rounded-3">
+                <h1>Go Workshop Basics</h1>
+            </div>
+        </header>
+        <div class="row justify-content-between">
+            <div class="col-3 p-5 bg-light rounded-3">
+                <h2>Basics</h2>
+                <p>
+                    This page is used to display the output of the <em>basics</em> part of the workshop.
+                    The string and error you return in the <em>getResult</em> function are displayed to your right.
+                </p>
+                <p>
+                    <a href="javascript:window.location.reload(true)">Reload this page</a>
+                </p>
+            </div>
+            <div class="col-4 p-5 bg-light rounded-3">
+                <h2>Output:</h2>
+
+                <div class="p-3 rounded-3 bg-white">
+                    <p>
+                        {{ .result }}
+                    </p>
+                </div>
+            </div>
+            <div class="col-4 p-5 bg-light rounded-3">
+                <h2>Errors:</h2>
+
+                <div class="p-3 rounded-3 bg-danger text-white">
+                    <p>
+                        {{ .error }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
