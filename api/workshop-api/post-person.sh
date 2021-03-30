@@ -2,4 +2,4 @@
 
 curl http://localhost:8080/api/people \
     -X POST \
-    -d '{ \"name\": \"Jan\", "title": "Developer"}'
+    -d '{ "name": "Jan", "title": "Developer"}'
