@@ -19,6 +19,7 @@ func main() {
 	// Add routes
 	apiRunner.GET("/basics/:input", basics.Basics)
 	apiRunner.GET("/api/people", workshop_api.GetPeopleRoute)
+	apiRunner.POST("/api/people", workshop_api.PostPeopleRoute)
 
 	// Run the application on port 8080
 	err := apiRunner.Run(serveAddress)

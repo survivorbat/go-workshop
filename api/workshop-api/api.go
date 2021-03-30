@@ -48,3 +48,28 @@ func GetPeopleRoute(c *gin.Context) {
 	// Return json
 	c.JSON(200, result)
 }
+
+func addPerson(person Person) error {
+	People = append(People, person)
+	return nil
+}
+
+func PostPeopleRoute(c *gin.Context) {
+	var postedPerson Person
+
+	// Note here that we're declaring a variable within an if-statement,
+	// this is a valid Go construct :-)!
+	if err := c.ShouldBindJSON(&postedPerson); err != nil {
+		c.JSON(400, map[string]string{ "error": err.Error() })
+		return
+	}
+
+	err := addPerson(postedPerson)
+
+	if err != nil {
+		c.JSON(500, map[string]string{"error": err.Error()})
+		return
+	}
+
+	c.JSON(200, map[string]string{"result": "Success!"})
+}

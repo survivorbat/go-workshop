@@ -234,7 +234,9 @@ Just like `getPeople`, now create a `addPerson(person Person) error` function th
 the given person to the `People` list.
 You can use the `append()` function for this: `People = append(People, person)`.
 
-You may write a test for it as well: `TestAddPerson_AddsThePersonToTheList`
+You may write a test for it as well: `TestAddPerson_AddsThePersonToTheList`.
+Test if a new person gets added to the list, of course with different
+sets of test data.
 
 ### C: Accept incoming POST requests
 
@@ -246,7 +248,7 @@ var postedPerson Person
 
 // Note here that we're declaring a variable within an if-statement,
 // this is a valid Go construct :-)!
-if err := c.ShouldBindJSON(&requestObject); err != nil {
+if err := c.ShouldBindJSON(&postedPerson); err != nil {
 	// TODO: Do something if the input data was faulty
 }
 ```
@@ -271,10 +273,11 @@ It should return a 500 error or a 200 error depending on the error check.
 
 ### G: Check it out
 
-Now, run the `post-person.sh` script again, does the person get added?
+Now, run the `post-person.sh` script again, does the person get added if you
+filter on title 'Developer'?
 
 ## Conclusion
 
 Great, you just created a simple API.
 The final part of the workshop will implement some useful patterns to
-
+improve this setup.
