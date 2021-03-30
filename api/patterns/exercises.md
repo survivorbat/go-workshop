@@ -172,3 +172,43 @@ func (p *MockPeopleService) getPeople(filterTitle string) {
 // ... addPeople
 ```
 
+This service will allow us to properly test whether
+the routes behave accordingly whenever edge-case values are returned.
+
+For example:
+
+```go
+func TestGetPeopleRoute_Returns500OnError(t *testing.T) {
+	tests := map[string]struct{
+        errorMessage string		
+    } {
+	    "test": {errorMessage: "test"},
+	    "error occurred": {errorMessage: "error occurred"}
+    }
+	
+    for name, testData := range tests {
+    	t.Run(name, func (t *testing.T)) {
+          // Arrange
+    		
+    	  // Make sure this returns an error
+          mockService := MockPeopleService{}
+          mockService.GetPeopleError = errors.New(testData.errorMessage)
+          
+          // Get the controller
+          controller := PeopleController{PeopleService: mockService}
+
+          // Response will be written to this writer
+          writer := httptest.NewRecorder()
+          
+          // Test context for Gin
+          c, _ := gin.CreateTestContext(writer)
+          
+          // Act
+          controller.GetPeopleRoute(c)
+          
+          // Assert 
+          assert.Equal(t, 500, writer.Code)
+      }
+    }
+}
+```
