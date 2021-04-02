@@ -21,6 +21,7 @@ Then you can visit these pages:
 		- [A: Changing signatures](#a-changing-signatures)
 		- [B: Update `getPeople` test](#b-update-getpeople-test)
 		- [C: Test to see if it works](#c-test-to-see-if-it-works)
+		- [D: Optional](#d-optional)
 	- [Exercise 4: Creating people](#exercise-4-creating-people)
 		- [A: Add the route](#a-add-the-route)
 		- [B: Adding a person](#b-adding-a-person)

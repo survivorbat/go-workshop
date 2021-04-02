@@ -11,6 +11,7 @@ its testability.
   - [Logging](#logging)
   - [Higher order functions](#higher-order-functions)
   - ['Inheritance' -> Embedding](#inheritance---embedding)
+  - [Dockerfiles](#dockerfiles)
 
 ---
 
