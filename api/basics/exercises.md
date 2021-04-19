@@ -45,7 +45,7 @@ You can change this to anything you like.
 
 ## Before you begin
 
-Go has a few compile-check in place that force you to
+Go has a few compile-checks in place that force you to
 write better code.
 One of these checks is for unused variables.
 If you declare a variable but don't use it, Go will call you
