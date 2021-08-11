@@ -12,7 +12,6 @@ run: ## Run the program, alias: r
 
 t: test
 test: ## Run unit tests, alias: t
-	@go test -i $(TEST) || exit 1
 	@echo $(TEST) | xargs -t -n4 go test $(TESTARGS) -timeout=30s -parallel=4
 
 .PHONY: run r t test

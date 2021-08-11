@@ -2,6 +2,7 @@ package workshop_api
 
 import (
 	"fmt"
+	"net/http"
 	"net/http/httptest"
 	"testing"
 
@@ -34,6 +35,9 @@ func TestGetPeopleRoute_ReturnsExpectedData(t *testing.T) {
 
 	// Test context for Gin
 	c, _ := gin.CreateTestContext(writer)
+
+	// Add a request to the context, so we can extract values from it later (title)
+	c.Request = httptest.NewRequest(http.MethodGet, "https://example.com", nil)
 
 	// Act
 	GetPeopleRoute(c)

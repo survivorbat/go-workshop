@@ -10,15 +10,14 @@ Then you can visit these pages:
 - [localhost:8080/api/people](http://localhost:8080/api/people)
 
 - [Patterns Exercises](#patterns-exercises)
-	- [Exercise 1, Mocking Routes](#exercise-1-mocking-routes)
-		- [A: Controller struct](#a-controller-struct)
-		- [B: Service struct](#b-service-struct)
-		- [C: Interface magic](#c-interface-magic)
-		- [D: Almost there](#d-almost-there)
-		- [Intermission](#intermission)
-		- [E: Writing a test](#e-writing-a-test)
-		- [F: The POST route](#f-the-post-route)
-	- [Conclusion](#conclusion)
+  - [Exercise 1, Mocking Routes](#exercise-1-mocking-routes)
+    - [A: Controller struct](#a-controller-struct)
+    - [B: Service struct](#b-service-struct)
+    - [C: Interface magic](#c-interface-magic)
+    - [D: Almost there](#d-almost-there)
+    - [Intermission](#intermission)
+    - [E: Writing a test](#e-writing-a-test)
+    - [F: The POST route](#f-the-post-route)
 
 ## Exercise 1, Mocking Routes
 
@@ -209,7 +208,10 @@ func TestGetPeopleRoute_Returns500OnError(t *testing.T) {
 			// Test context for Gin
 			c, _ := gin.CreateTestContext(writer)
 
-			// Act
+			// Add a request to the context, so we can extract values from it (title)
+            c.Request = httptest.NewRequest(http.MethodGet, "https://example.com?title=empty", nil) 
+
+            // Act
 			controller.GetPeopleRoute(c)
 
 			// Assert
@@ -222,42 +224,3 @@ func TestGetPeopleRoute_Returns500OnError(t *testing.T) {
 Now, create a test like this for the GetPeopleCalledWith property,
 check if the function is called with the expected parameter (title).
 
-### F: The POST route
-
-Now it's your turn to test the POST route.
-You can 'inject' the POST body using the following statements:
-
-```go
-// Arrange
-// ...
-
-inputObject := Person{}
-
-// Create the writer and context
-writer := httptest.NewRecorder()
-c, _ := gin.CreateTestContext(writer)
-
-// Turn the inputObject into JSON
-jsonBody, _ := json.Marshal()
-bodyBuffer := ioutil.NopCloser(bytes.NewReader(jsonBody))
-
-// Put it inside of the request
-c.Request = &http.Request{
-	Body: bodyBuffer,
-}
-
-// ...
-```
-
-Now, add some test data and use this construct to see if the route
-returns a 200 response.
-
-## Conclusion
-
-This is where the workshop ends.
-There's an entire mountain of Go features that we haven't touched yet such as
-goroutines and channels that I recommend you check out.
-But for now, we have a simple API and know how
-to perform a few basic operations in this language.
-
-We hope you found it useful :-)
