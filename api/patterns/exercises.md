@@ -208,7 +208,10 @@ func TestGetPeopleRoute_Returns500OnError(t *testing.T) {
 			// Test context for Gin
 			c, _ := gin.CreateTestContext(writer)
 
-			// Act
+			// Add a request to the context, so we can extract values from it (title)
+            c.Request = httptest.NewRequest(http.MethodGet, "https://example.com?title=empty", nil) 
+
+            // Act
 			controller.GetPeopleRoute(c)
 
 			// Assert
@@ -220,6 +223,4 @@ func TestGetPeopleRoute_Returns500OnError(t *testing.T) {
 
 Now, create a test like this for the GetPeopleCalledWith property,
 check if the function is called with the expected parameter (title).
-
-### F: The POST route
 

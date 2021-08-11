@@ -3,6 +3,7 @@ package workshop_api
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
+	"net/http"
 	"net/http/httptest"
 	"testing"
 
@@ -114,7 +115,7 @@ func TestGetPeopleRoute_Returns500OnError(t *testing.T) {
 	tests := map[string]struct{
 		errorMessage string
 	} {
-		"test": {errorMessage: "test"},
+		"test error": {errorMessage: "test error"},
 		"error occurred": {errorMessage: "error occurred"},
 	}
 
@@ -134,6 +135,9 @@ func TestGetPeopleRoute_Returns500OnError(t *testing.T) {
 
 			// Test context for Gin
 			c, _ := gin.CreateTestContext(writer)
+
+			// Add a request to the context, so we can extract values from it (title)
+			c.Request = httptest.NewRequest(http.MethodGet, "https://example.com?title=empty", nil)
 
 			// Act
 			controller.GetPeopleRoute(c)

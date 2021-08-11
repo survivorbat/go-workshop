@@ -1,6 +1,8 @@
 package workshop_api
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+)
 
 /**
 Exercise 1, 2, 3 and 4
